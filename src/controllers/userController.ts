@@ -1,0 +1,102 @@
+import { Request, Response } from 'express';
+import User from '../models/User';
+import Role from '../models/Role';
+import bcrypt from 'bcryptjs';
+
+// @desc    Get all staff/users
+// @route   GET /api/users
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find().populate('role', 'name').select('-passwordHash');
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// @desc    Create a staff member
+// @route   POST /api/users
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { firstName, lastName, email, password, roleName } = req.body;
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Find or create role
+    let role = await Role.findOne({ name: roleName || 'Teacher' });
+    if (!role) {
+      role = await Role.create({ name: roleName || 'Teacher', permissions: [] });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      passwordHash,
+      role: role._id,
+    });
+
+    res.status(201).json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+    });
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid user data', error });
+  }
+};
+
+// @desc    Update a user
+// @route   PUT /api/users/:id
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const isSelf = req.user?.id === req.params.id;
+    const isAdmin = req.user?.role === 'Admin' || req.user?.role === 'SuperAdmin';
+    
+    if (!isSelf && !isAdmin) {
+      return res.status(403).json({ message: 'User not authorized to update this profile' });
+    }
+
+    const { firstName, lastName, email, phoneNumber, roleName, isActive } = req.body;
+    
+    // Everyone can update basic profile info
+    const updates: any = { firstName, lastName, email };
+    if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber;
+    
+    // Only Admin/SuperAdmin can change roles and active status
+    if (isAdmin) {
+      if (isActive !== undefined) updates.isActive = isActive;
+      if (roleName) {
+        let role = await Role.findOne({ name: roleName });
+        if (!role) role = await Role.create({ name: roleName, permissions: [] });
+        updates.role = role._id;
+      }
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true }).populate('role', 'name');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    res.json(user);
+  } catch (error) {
+    res.status(400).json({ message: 'Invalid data', error });
+  }
+};
+
+// @desc    Delete a user
+// @route   DELETE /api/users/:id
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'User removed' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error });
+  }
+};
