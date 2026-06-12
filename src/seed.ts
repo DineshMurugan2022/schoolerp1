@@ -18,10 +18,10 @@ const seedAdmin = async () => {
     }
 
     // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: 'admin@tinysteps.com' });
+    const existingAdmin = await User.findOne({ email: 'admin@gardenguru.com' });
     if (existingAdmin) {
       console.log('Admin user already exists! You can log in with:');
-      console.log('Email: admin@tinysteps.com');
+      console.log('Email: admin@gardenguru.com');
       console.log('Password: password123');
       process.exit();
     }
@@ -34,14 +34,14 @@ const seedAdmin = async () => {
     await User.create({
       firstName: 'System',
       lastName: 'Admin',
-      email: 'admin@tinysteps.com',
+      email: 'admin@gardenguru.com',
       passwordHash: hashedPassword,
       role: adminRole._id,
     });
 
     console.log('SUCCESS! Admin user seeded successfully.');
     console.log('You can now log in at http://localhost:3000/login with:');
-    console.log('Email: admin@tinysteps.com');
+    console.log('Email: admin@gardenguru.com');
     console.log('Password: password123');
     process.exit();
   } catch (error) {
