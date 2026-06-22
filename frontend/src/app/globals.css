@@ -1,12 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6366f1; /* Indigo 500 */
-  --color-primary-hover: #4f46e5; /* Indigo 600 */
-  --color-secondary: #ec4899; /* Pink 500 */
+  --color-primary: #8b5cf6; /* Violet 500 */
+  --color-primary-hover: #7c3aed; /* Violet 600 */
+  --color-secondary: #f43f5e; /* Rose 500 */
   --color-accent: #f59e0b; /* Amber 500 */
-  --color-background-start: #f8fafc;
-  --color-background-end: #e2e8f0;
+  --color-success: #10b981; /* Emerald 500 */
+  --color-background-start: #fdf4ff; /* Fuchsia 50 */
+  --color-background-end: #e0e7ff; /* Indigo 50 */
+
+  --animate-blob: blob 7s infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+  }
 }
 
 @layer base {
@@ -23,18 +41,27 @@
 
 body {
   color: var(--foreground);
-  background: linear-gradient(to bottom, var(--color-background-start), var(--color-background-end));
+  background: linear-gradient(135deg, var(--color-background-start), var(--color-background-end));
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.15);
+}
+
+.glass-panel-heavy {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
 }
 
 .gradient-text {
@@ -42,4 +69,16 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }

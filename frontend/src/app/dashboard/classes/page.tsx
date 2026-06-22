@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Users, BookOpen } from 'lucide-react';
 
 export default function ClassesPage() {
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newClassName, setNewClassName] = useState('');
