@@ -29,11 +29,11 @@ const seedDB = async () => {
 
     // 1. Create a Staff/SuperAdmin
     const staff = await User.findOneAndUpdate(
-      { email: 'admin@school.com' },
+      { email: 'admin@gardenguru.com' },
       {
         firstName: 'Alice',
         lastName: 'Admin',
-        email: 'admin@school.com',
+        email: 'admin@gardenguru.com',
         password: hashedPassword,
         role: adminRole._id,
         status: 'Active',
@@ -41,7 +41,7 @@ const seedDB = async () => {
       },
       { upsert: true, new: true }
     );
-    console.log('Admin created: admin@school.com / password123');
+    console.log('Admin created: admin@gardenguru.com / password123');
 
     // 2. Create a Teacher
     const teacher = await User.findOneAndUpdate(
