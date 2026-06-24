@@ -81,8 +81,9 @@ export default function AdmissionsPage() {
       <div className="max-w-4xl mx-auto space-y-12 relative z-10 mt-10">
         <div className="text-center space-y-4">
           <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-20 text-center">
-          <h1 className="text-5xl font-black tracking-tight text-white drop-shadow-md">Join the E.A.S. Academy School Family</h1>
-          <p className="mt-6 text-xl text-indigo-50 max-w-2xl mx-auto drop-shadow">Fill out the application form below to start your child's educational journey with us.</p>
+            <h1 className="text-5xl font-black tracking-tight text-white drop-shadow-md">Join the E.A.S. Academy School Family</h1>
+            <p className="mt-6 text-xl text-indigo-50 max-w-2xl mx-auto drop-shadow">Fill out the application form below to start your child's educational journey with us.</p>
+          </div>
         </div>
 
         <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl border border-slate-100">
