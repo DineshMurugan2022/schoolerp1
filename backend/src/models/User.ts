@@ -14,6 +14,10 @@ export interface IUser extends Document {
   experienceYears?: number;
   performanceNotes?: string;
   joinDate?: Date;
+  teachingAssignments?: {
+    classId: mongoose.Types.ObjectId;
+    subjectId: mongoose.Types.ObjectId;
+  }[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -72,6 +76,12 @@ const UserSchema: Schema = new Schema(
       type: Date,
       default: Date.now,
     },
+    teachingAssignments: [
+      {
+        classId: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+        subjectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }
+      }
+    ],
   },
   { timestamps: true }
 );

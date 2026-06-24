@@ -5,6 +5,8 @@ import { BookOpen, Plus, Edit2, Trash2, Search, Phone, Mail, Award, Clock, Dolla
 
 export default function TeachersPage() {
   const [teachers, setTeachers] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,26 +25,33 @@ export default function TeachersPage() {
     experienceYears: '',
     salary: '',
     performanceNotes: '',
-    roleName: 'Teacher'
+    roleName: 'Teacher',
+    teachingAssignments: [] as { classId: string, subjectId: string }[]
   });
 
   useEffect(() => {
-    fetchTeachers();
+    fetchData();
   }, []);
 
-  const fetchTeachers = async () => {
+  const fetchData = async () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (res.ok) {
-        const allUsers = await res.json();
-        // Filter out non-teachers if needed, but for now we assume this page is for staff/teachers
+      const headers = { 'Authorization': `Bearer ${token}` };
+      
+      const [usersRes, classesRes, subjectsRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, { headers }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/classes`, { headers }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/academic/subjects`, { headers })
+      ]);
+
+      if (usersRes.ok) {
+        const allUsers = await usersRes.json();
         const staff = allUsers.filter((u: any) => u.role?.name === 'Teacher' || u.role?.name === 'Principal');
         setTeachers(staff);
       }
+      if (classesRes.ok) setClasses(await classesRes.json());
+      if (subjectsRes.ok) setSubjects(await subjectsRes.json());
     } catch (error) {
       console.error(error);
     } finally {
@@ -54,7 +63,8 @@ export default function TeachersPage() {
     setFormData({
       firstName: '', lastName: '', email: '', password: '',
       phoneNumber: '', designation: '', qualification: '',
-      experienceYears: '', salary: '', performanceNotes: '', roleName: 'Teacher'
+      experienceYears: '', salary: '', performanceNotes: '', roleName: 'Teacher',
+      teachingAssignments: []
     });
     setEditingTeacherId(null);
     setActiveTab('list');
@@ -73,7 +83,11 @@ export default function TeachersPage() {
       experienceYears: teacher.experienceYears?.toString() || '',
       salary: teacher.salary?.toString() || '',
       performanceNotes: teacher.performanceNotes || '',
-      roleName: teacher.role?.name || 'Teacher'
+      roleName: teacher.role?.name || 'Teacher',
+      teachingAssignments: teacher.teachingAssignments ? teacher.teachingAssignments.map((ta: any) => ({
+        classId: ta.classId?._id || ta.classId || '',
+        subjectId: ta.subjectId?._id || ta.subjectId || ''
+      })) : []
     });
     setActiveTab('create');
   };
@@ -86,7 +100,7 @@ export default function TeachersPage() {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      fetchTeachers();
+      fetchData();
     } catch (error) {
       console.error(error);
     }
@@ -116,7 +130,7 @@ export default function TeachersPage() {
 
       if (res.ok) {
         resetForm();
-        fetchTeachers();
+        fetchData();
       } else {
         alert('Error saving teacher data');
       }
@@ -223,6 +237,19 @@ export default function TeachersPage() {
                         <span>{teacher.experienceYears ? `${teacher.experienceYears} Years Experience` : 'No experience recorded'}</span>
                       </div>
                       
+                      {teacher.teachingAssignments && teacher.teachingAssignments.length > 0 && (
+                        <div className="pt-3 mt-3 border-t border-slate-100">
+                          <span className="text-xs font-bold text-slate-400 uppercase block mb-2">Teaching Assignments</span>
+                          <div className="flex flex-wrap gap-2">
+                            {teacher.teachingAssignments.map((ta: any, idx: number) => (
+                              <span key={idx} className="text-[10px] font-bold bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md border border-indigo-100">
+                                {ta.subjectId?.name || 'Unknown'} ({ta.classId?.name || 'Unknown'})
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      
                       {teacher.performanceNotes && (
                         <div className="pt-3 mt-3 border-t border-slate-100">
                           <p className="text-xs text-slate-500 italic line-clamp-2">
@@ -292,6 +319,77 @@ export default function TeachersPage() {
                   <textarea rows={3} placeholder="Internal administrative notes..." className="w-full rounded-xl border-slate-300 py-3 px-4 focus:ring-indigo-500 font-medium" value={formData.performanceNotes} onChange={e => setFormData({...formData, performanceNotes: e.target.value})}></textarea>
                 </div>
               </div>
+            </div>
+
+            {/* Teaching Assignments */}
+            <div>
+              <div className="flex items-center justify-between mb-4 border-b border-slate-100 pb-2">
+                <h2 className="text-lg font-bold text-slate-800">Teaching Assignments</h2>
+                <button 
+                  type="button" 
+                  onClick={() => setFormData({...formData, teachingAssignments: [...formData.teachingAssignments, {classId: '', subjectId: ''}]})}
+                  className="text-sm font-bold text-indigo-600 hover:text-indigo-800 flex items-center bg-indigo-50 px-3 py-1.5 rounded-lg"
+                >
+                  <Plus className="h-4 w-4 mr-1" /> Add Assignment
+                </button>
+              </div>
+              
+              {formData.teachingAssignments.length === 0 ? (
+                <div className="text-sm text-slate-500 italic py-4 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                  No classes or subjects assigned yet. Click "Add Assignment" to start.
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {formData.teachingAssignments.map((assignment, index) => (
+                    <div key={index} className="flex flex-col md:flex-row gap-4 items-start md:items-end bg-slate-50 p-4 rounded-xl border border-slate-200">
+                      <div className="flex-1 w-full">
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Class</label>
+                        <select 
+                          required
+                          className="w-full rounded-xl border-slate-300 py-3 px-4 focus:ring-indigo-500 font-medium" 
+                          value={assignment.classId} 
+                          onChange={e => {
+                            const newAssignments = [...formData.teachingAssignments];
+                            newAssignments[index].classId = e.target.value;
+                            setFormData({...formData, teachingAssignments: newAssignments});
+                          }}
+                        >
+                          <option value="">Select Class...</option>
+                          {classes.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                        </select>
+                      </div>
+                      <div className="flex-1 w-full">
+                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Subject</label>
+                        <select 
+                          required
+                          className="w-full rounded-xl border-slate-300 py-3 px-4 focus:ring-indigo-500 font-medium" 
+                          value={assignment.subjectId} 
+                          onChange={e => {
+                            const newAssignments = [...formData.teachingAssignments];
+                            newAssignments[index].subjectId = e.target.value;
+                            setFormData({...formData, teachingAssignments: newAssignments});
+                          }}
+                        >
+                          <option value="">Select Subject...</option>
+                          {subjects.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
+                        </select>
+                      </div>
+                      <button 
+                        type="button" 
+                        onClick={() => {
+                          const newAssignments = [...formData.teachingAssignments];
+                          newAssignments.splice(index, 1);
+                          setFormData({...formData, teachingAssignments: newAssignments});
+                        }}
+                        className="p-3 text-rose-600 hover:bg-rose-100 rounded-xl transition-colors md:mt-0 mt-2 self-end md:self-auto"
+                        title="Remove Assignment"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-3 pt-6 border-t border-slate-100">

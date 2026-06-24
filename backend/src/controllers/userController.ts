@@ -7,7 +7,11 @@ import bcrypt from 'bcryptjs';
 // @route   GET /api/users
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await User.find().populate('role', 'name').select('-passwordHash');
+    const users = await User.find()
+      .populate('role', 'name')
+      .populate('teachingAssignments.classId', 'name')
+      .populate('teachingAssignments.subjectId', 'name')
+      .select('-passwordHash');
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
@@ -18,7 +22,7 @@ export const getUsers = async (req: Request, res: Response) => {
 // @route   POST /api/users
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, email, password, roleName, salary, designation, joinDate, qualification, experienceYears, performanceNotes } = req.body;
+    const { firstName, lastName, email, password, roleName, salary, designation, joinDate, qualification, experienceYears, performanceNotes, teachingAssignments } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -45,6 +49,7 @@ export const createUser = async (req: Request, res: Response) => {
       qualification,
       experienceYears,
       performanceNotes,
+      teachingAssignments,
       joinDate: joinDate ? new Date(joinDate) : undefined,
     });
 
@@ -70,7 +75,7 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: 'User not authorized to update this profile' });
     }
 
-    const { firstName, lastName, email, phoneNumber, roleName, isActive, salary, designation, joinDate, qualification, experienceYears, performanceNotes } = req.body;
+    const { firstName, lastName, email, phoneNumber, roleName, isActive, salary, designation, joinDate, qualification, experienceYears, performanceNotes, teachingAssignments } = req.body;
     
     // Everyone can update basic profile info
     const updates: any = { firstName, lastName, email };
@@ -90,9 +95,13 @@ export const updateUser = async (req: Request, res: Response) => {
       }
       if (salary !== undefined) updates.salary = salary;
       if (joinDate !== undefined) updates.joinDate = new Date(joinDate);
+      if (teachingAssignments !== undefined) updates.teachingAssignments = teachingAssignments;
     }
 
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true }).populate('role', 'name');
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true })
+      .populate('role', 'name')
+      .populate('teachingAssignments.classId', 'name')
+      .populate('teachingAssignments.subjectId', 'name');
     if (!user) return res.status(404).json({ message: 'User not found' });
     
     res.json(user);
