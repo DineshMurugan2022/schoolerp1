@@ -60,7 +60,7 @@ app.use(cors({
 }));
 
 // Handle OPTIONS preflight for all routes explicitly
-app.options('/(.*)', cors({
+app.options(/.*/, cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
