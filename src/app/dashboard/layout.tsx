@@ -56,8 +56,11 @@ export default function DashboardLayout({
     <div className="flex h-screen bg-slate-50">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-slate-200 flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-slate-200 shrink-0">
-          <span className="text-xl font-bold gradient-text">Garden Guru ERP</span>
+        <div className="flex h-16 shrink-0 items-center gap-x-3 px-6 bg-slate-900/50 backdrop-blur-xl border-b border-slate-800">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <span className="text-white font-bold text-lg">E</span>
+          </div>
+          <span className="text-xl font-bold gradient-text">E.A.S. Academy School ERP</span>
         </div>
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
           <Link href="/dashboard" className="flex items-center px-3 py-2 text-slate-600 hover:bg-slate-50 hover:text-indigo-600 rounded-lg group transition-colors">

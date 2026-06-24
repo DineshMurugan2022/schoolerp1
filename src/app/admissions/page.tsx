@@ -61,8 +61,8 @@ export default function AdmissionsPage() {
           </div>
           <div>
             <h2 className="text-3xl font-black text-slate-800 mb-2">Application Received!</h2>
-            <p className="text-slate-500 leading-relaxed font-medium">
-              Thank you for choosing Garden Guru. Our admissions team will review your enquiry and get back to you within 24-48 hours.
+            <p className="text-slate-600 mb-8">
+              Thank you for choosing E.A.S. Academy School. Our admissions team will review your enquiry and get back to you within 24-48 hours.
             </p>
           </div>
           <Link href="/" className="inline-flex items-center justify-center w-full py-3 px-4 bg-slate-50 text-slate-700 font-bold hover:bg-slate-100 rounded-xl transition-colors border border-slate-200">
@@ -80,11 +80,9 @@ export default function AdmissionsPage() {
       
       <div className="max-w-4xl mx-auto space-y-12 relative z-10 mt-10">
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-white/10 text-indigo-100 font-semibold text-sm backdrop-blur-md border border-white/20 mb-4">
-            <Sparkles className="h-4 w-4 mr-2" /> 2026-2027 Admissions Open
-          </div>
-          <h1 className="text-5xl font-black tracking-tight text-white drop-shadow-md">Join the Garden Guru Family</h1>
-          <p className="text-xl text-indigo-100 max-w-2xl mx-auto font-medium">Fill out the application form below to start your child's educational journey with us.</p>
+          <div className="relative z-10 max-w-4xl mx-auto px-6 pt-32 pb-20 text-center">
+          <h1 className="text-5xl font-black tracking-tight text-white drop-shadow-md">Join the E.A.S. Academy School Family</h1>
+          <p className="mt-6 text-xl text-indigo-50 max-w-2xl mx-auto drop-shadow">Fill out the application form below to start your child's educational journey with us.</p>
         </div>
 
         <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl border border-slate-100">

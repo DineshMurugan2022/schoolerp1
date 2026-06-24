@@ -10,8 +10,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Garden Guru Preschool ERP",
-  description: "Comprehensive management system for Pre-KG, LKG, and UKG.",
+  title: "E.A.S. Academy School ERP",
+  description: "Comprehensive management system for E.A.S. Academy School",
 };
 
 export default function RootLayout({

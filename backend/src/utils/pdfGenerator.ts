@@ -12,7 +12,7 @@ export const generatePayslipPDF = (res: any, payrollData: any) => {
   doc.pipe(res);
 
   // Header
-  doc.fillColor('#4f46e5').fontSize(24).text('Garden Guru ERP', { align: 'center' });
+  doc.fillColor('#4f46e5').fontSize(24).text('E.A.S. Academy School ERP', { align: 'center' });
   doc.fillColor('#64748b').fontSize(10).text('123 Education Lane, Learning City, 10001', { align: 'center' });
   doc.moveDown(2);
 
@@ -76,7 +76,7 @@ export const generateReportCardPDF = (res: any, student: any, assessments: any[]
   doc.pipe(res);
 
   // Header
-  doc.fillColor('#4f46e5').fontSize(24).text('Garden Guru ERP', { align: 'center' });
+  doc.fillColor('#4f46e5').fontSize(24).text('E.A.S. Academy School ERP', { align: 'center' });
   doc.fillColor('#64748b').fontSize(10).text('Early Childhood Education Report', { align: 'center' });
   doc.moveDown(2);
 

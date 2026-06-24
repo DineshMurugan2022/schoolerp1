@@ -182,9 +182,9 @@ export default function IdCardGenerator() {
               {/* Card Header Pattern */}
               <div className="h-28 w-full bg-gradient-to-br from-indigo-600 to-indigo-800 relative">
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-                <div className="pt-4 text-center">
-                  <h2 className="text-white font-black text-xl tracking-wider">GARDEN GURU</h2>
-                  <p className="text-indigo-200 text-[10px] uppercase font-bold tracking-widest mt-0.5">Preschool</p>
+                <div className="flex-1 pt-4 text-center">
+                  <h2 className="text-white font-black text-xl tracking-wider">E.A.S. ACADEMY SCHOOL</h2>
+                  <p className="text-indigo-200 text-xs tracking-widest uppercase mt-0.5">Student ID Card</p>
                 </div>
               </div>
               
@@ -245,10 +245,9 @@ export default function IdCardGenerator() {
                   <p className="text-[10px] font-bold text-slate-600 leading-relaxed">{details.address || '-'}</p>
                 </div>
 
-                <div className="pt-3 border-t border-dashed border-slate-300 mt-4 text-center">
-                  <p className="text-[8px] font-bold text-slate-800">Garden Guru Preschool</p>
-                  <p className="text-[8px] font-medium text-slate-500 mt-0.5">45 Education Blvd, City Center</p>
-                  <p className="text-[8px] font-medium text-slate-500">Ph: +91 800-TINYSTEP</p>
+                <div className="w-full flex items-center justify-between opacity-50">
+                  <p className="text-[8px] font-bold text-slate-800">E.A.S. Academy School</p>
+                  <p className="text-[8px] text-slate-600">Valid till: Mar 2025</p>
                 </div>
               </div>
               

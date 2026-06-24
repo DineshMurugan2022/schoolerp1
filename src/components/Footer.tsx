@@ -57,16 +57,16 @@ export default function Footer() {
               <Phone className="h-5 w-5 text-violet-500 shrink-0" />
               <span>+1 (555) 123-4567</span>
             </li>
-            <li className="flex items-center gap-3 text-slate-500 font-medium">
-              <Mail className="h-5 w-5 text-violet-500 shrink-0" />
-              <span>hello@gardenguru.edu</span>
+            <li className="flex items-center space-x-3 text-slate-400">
+              <Mail className="h-5 w-5 text-indigo-400" />
+              <span>hello@easacademy.com</span>
             </li>
           </ul>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-100 text-center text-slate-400 font-medium">
-        <p>&copy; {new Date().getFullYear()} Garden Guru Preschool. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} E.A.S. Academy School. All rights reserved.</p>
       </div>
     </footer>
   );

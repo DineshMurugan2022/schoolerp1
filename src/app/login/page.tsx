@@ -57,8 +57,8 @@ export default function LoginPage() {
 
       <div className="glass-panel w-full max-w-md p-8 sm:p-10 rounded-3xl shadow-2xl relative z-10 border border-white/50">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Welcome Back</h1>
-          <p className="text-slate-500 mt-2">Sign in to your Garden Guru portal</p>
+          <h2 className="mt-6 text-3xl font-black tracking-tight text-slate-900">Welcome Back</h2>
+          <p className="text-slate-500 mt-2">Sign in to your E.A.S. Academy School portal</p>
         </div>
 
         {error && (
