@@ -6,8 +6,14 @@ let io: SocketIOServer;
 export const initSocket = (httpServer: HttpServer) => {
   io = new SocketIOServer(httpServer, {
     cors: {
-      origin: '*', // In production, restrict to frontend domain
+      origin: [
+        'http://localhost:5173', 
+        'http://localhost:3000', 
+        'https://schoolerp-livid.vercel.app',
+        process.env.FRONTEND_URL || ''
+      ].filter(Boolean),
       methods: ['GET', 'POST'],
+      credentials: true,
     },
   });
 
