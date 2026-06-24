@@ -16,7 +16,7 @@ export default function Navbar() {
             <Flower2 className="h-6 w-6 text-violet-600" />
           </div>
           <span className="text-2xl font-extrabold tracking-tight text-slate-800">
-            Garden<span className="text-violet-600">Guru</span>
+            E.A.S.<span className="text-violet-600">Academy</span>
           </span>
         </Link>
 

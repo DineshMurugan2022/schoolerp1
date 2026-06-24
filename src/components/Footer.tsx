@@ -14,8 +14,8 @@ export default function Footer() {
             <div className="bg-violet-100 p-2 rounded-xl">
               <Flower2 className="h-6 w-6 text-violet-600" />
             </div>
-            <span className="text-2xl font-extrabold tracking-tight text-slate-800">
-              Garden<span className="text-violet-600">Guru</span>
+            <span className="text-2xl font-black tracking-tight text-slate-800">
+              E.A.S.<span className="text-violet-600">Academy</span>
             </span>
           </Link>
           <p className="text-slate-500 font-medium leading-relaxed">
