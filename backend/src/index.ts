@@ -1,6 +1,10 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
+// Load env vars FIRST before anything else
+dotenv.config();
+
 import { createServer } from 'http';
 import connectDB from './config/db';
 import { initSocket } from './socket';
@@ -27,24 +31,46 @@ import daycareRoutes from './routes/daycareRoutes';
 import galleryRoutes from './routes/galleryRoutes';
 import payrollRoutes from './routes/payrollRoutes';
 
-// Load env vars
-dotenv.config();
-
 // Connect to database
 connectDB();
 
 const app = express();
 
-// Middleware
+// Allowed origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://schoolerp-livid.vercel.app',
+  process.env.FRONTEND_URL,
+].filter(Boolean) as string[];
+
+// Middleware - CORS
 app.use(cors({
-  origin: [
-    'http://localhost:5173', 
-    'http://localhost:3000', 
-    'https://schoolerp-livid.vercel.app',
-    process.env.FRONTEND_URL || ''
-  ].filter(Boolean),
+  origin: (origin, callback) => {
+    // allow requests with no origin (e.g. mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS: origin '${origin}' not allowed`));
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Handle OPTIONS preflight for all routes explicitly
+app.options('*', cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS: origin '${origin}' not allowed`));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
 
 // Basic route
