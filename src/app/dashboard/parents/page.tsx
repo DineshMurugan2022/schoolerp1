@@ -212,6 +212,21 @@ export default function ParentsPage() {
                           <span className="text-xs font-bold">WhatsApp: {parent.whatsappNumber}</span>
                         </div>
                       )}
+                      <div className="pt-3 mt-3 border-t border-slate-100">
+                        <span className="text-xs font-bold text-slate-400 uppercase block mb-2">Linked Students</span>
+                        {parent.students && parent.students.length > 0 ? (
+                          <div className="space-y-2">
+                            {parent.students.map((student: any) => (
+                              <div key={student._id} className="flex items-center justify-between bg-indigo-50/50 p-2 rounded-lg border border-indigo-50">
+                                <span className="font-semibold text-xs text-indigo-900">{student.firstName} {student.lastName}</span>
+                                {student.grade && <span className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-bold">{student.grade}</span>}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-xs text-slate-400 italic bg-slate-50 p-2 rounded-lg text-center">No students linked yet</div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

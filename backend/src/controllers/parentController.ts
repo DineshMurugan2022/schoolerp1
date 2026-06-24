@@ -1,10 +1,23 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import Parent from '../models/Parent';
 
 // Get all parents
 export const getParents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const parents = await Parent.find().sort({ createdAt: -1 });
+    const parents = await Parent.aggregate([
+      {
+        $lookup: {
+          from: 'students',
+          localField: '_id',
+          foreignField: 'parentId',
+          as: 'students'
+        }
+      },
+      {
+        $sort: { createdAt: -1 }
+      }
+    ]);
     res.json(parents);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching parents' });
@@ -25,12 +38,24 @@ export const createParent = async (req: Request, res: Response): Promise<void> =
 // Get a single parent
 export const getParentById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const parent = await Parent.findById(req.params.id);
-    if (!parent) {
+    const parentId = new mongoose.Types.ObjectId(req.params.id as string);
+    const parents = await Parent.aggregate([
+      { $match: { _id: parentId } },
+      {
+        $lookup: {
+          from: 'students',
+          localField: '_id',
+          foreignField: 'parentId',
+          as: 'students'
+        }
+      }
+    ]);
+    
+    if (!parents || parents.length === 0) {
       res.status(404).json({ message: 'Parent not found' });
       return;
     }
-    res.json(parent);
+    res.json(parents[0]);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching parent' });
   }
